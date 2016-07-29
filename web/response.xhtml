@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:head>
+        <title>Blackjack Simulator</title>
+    </h:head>
+    <h:body>
+        <h:form>
+            <h2>Blackjack Simulator.</h2>
+            <h3>Here are the criteria you have entered.</h3>
+            <p>
+                Starting amount: $
+                <h:outputText id="setPlayerMoney" value="#{play.playerMoney}"/>
+                <br/>
+                Bet set at: $
+                <h:outputText id="setBet" value="#{play.bet}"/>
+                <br/>
+                Number hands played:
+                <h:outputText id="setMaxHands" value="#{play.maxHands}"/>
+                <br/>
+                Experience level of player: 
+                <h:outputText id="playerLevel" value="#{play.playerType}"/>
+                <br/>
+
+                
+            </p>
+            <h3>The Result after #{play.maxHands} hands played.</h3>
+            <p>
+                Results go here....
+            </p>
+            <h:commandButton id="back" value="Back" action="index"/>
+        </h:form>
+    </h:body>
+</html>

@@ -1,0 +1,50 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:head>
+        <title>Blackjack Simulator</title>
+    </h:head>
+    <h:body>
+        <h1>Welcome to Blackjack Simulator!</h1>
+        <h:form>
+            <h2>Please fill in the information.</h2>
+            <p>
+                Set the amount of money you would like to start with: $
+                <h:inputText 
+                    id="playerMoney" 
+                    title="Set amount of money" 
+                    value="#{play.playerMoney}"
+                    />
+                <br/>
+                Set the bet* amount: $
+                <h:inputText
+                    id="bet"
+                    title="Set the value of bet"
+                    value="#{play.bet}"
+                    />
+                <br/>
+                Set the number of hands to play: 
+                <h:inputText
+                    id="numberOfHands"
+                    title="Set number of hands"
+                    value="#{play.maxHands}"
+                    />
+                <br/>
+                Select experience level: 
+                <h:selectOneRadio value="#{play.playerType}">
+                    <f:selectItem itemValue="Beginner" itemLabel="Beginner" />
+                    <f:selectItem itemValue="Intermediate" itemLabel="Intermediate" />
+                </h:selectOneRadio>
+                
+                <br/>
+                <h:commandButton id="submit" value="Submit" action="response"/>
+            </p>
+            <br/>
+                *Usual bets are increments of 5.
+        </h:form>
+    </h:body>
+</html>
+
