@@ -7,6 +7,7 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
     <h:head>
         <title>Blackjack Simulator</title>
+        <link href="styles.css" rel="stylesheet" type="text/css" />
     </h:head>
     <h:body>
         <h1>Welcome to Blackjack Simulator!</h1>
@@ -49,7 +50,10 @@
         </h:form>
         <!-- Start Test -->
         <h:form>
-            <h:dataTable value="#{play.res}" var="result">
+            <h:dataTable value="#{play.res}" var="result"
+                         styleClass="resultTable"
+                         headerClass="resultTableHeader"
+                         rowClasses="resultTableOddRow,resultTableEvenRow">
                 <h:column><f:facet name="header">Hand</f:facet>#{result.numberOfHands}</h:column>
                 <h:column><f:facet name="header">Bet</f:facet>$#{result.bet}</h:column>
                 <h:column><f:facet name="header">Player cards</f:facet>#{result.pCards}</h:column>
