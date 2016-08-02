@@ -311,7 +311,6 @@ public class Play {
             // play hand
             while (!handOver) {
 
-                //System.out.println("Player bet: $" + bet);
                 // reset values to false
                 push = false;
                 autoWin = false;
@@ -383,7 +382,7 @@ public class Play {
                 /**
                  * * End check for Blackjack **
                  */
-                //System.out.println("auto win: " + autoWin);
+
                 // decide what to do.
                 move = nextMove(hand, dealerHand);
 
@@ -445,7 +444,6 @@ public class Play {
             }
 
             //get total of dealerHand
-            
             tdealer = totalHand(dealerHand);
             
             // if dealerHand contains an ACE
@@ -490,31 +488,6 @@ public class Play {
              */
             numberOfHands++;
 
-            // print some test results to console
-            /*
-            System.out.println("player total final: " + tplayer);
-            System.out.println("dealer total final: " + tdealer);
-            System.out.println("player win? " + playerWin);
-            System.out.println("push? " + push);
-            System.out.println("auto win? " + autoWin);
-            System.out.println("cards left: " + deck.cardsLeft());
-            System.out.println("player money: $" + playerMoney);
-            System.out.print("Player cards: ");
-            for (Integer i : hand) {
-                System.out.print(i + ", ");
-            }
-            System.out.println("");
-            System.out.print("Dealer cards: ");
-            for (Integer i : dealerHand) {
-                System.out.print(i + ", ");
-            }
-            */
-
-            //System.out.println("\nPlayer wins: " + playerWins);
-            //System.out.println("Dealer wins: " + dealerWins);
-            //System.out.println("Player win ratio: " + (double) playerWins / (double) numberOfHands);
-            //System.out.println(numberOfHands + "\n");
-
             // who won?
             if(!playerWin && !dBust && !push)
                 winner = "Dealer";
@@ -538,22 +511,12 @@ public class Play {
                 over21 = "No";
             
             // Winning Ratio
-            System.out.println("Testing the winRatio");
-            System.out.println("pw: "+playerWins);
-            System.out.println("dw: "+dealerWins);
             if(playerWins > 0 || dealerWins > 0)
                 winRatio = ((double)playerWins/(double)(playerWins+dealerWins))*100 ;
             else
                 winRatio = 0.0;
-            System.out.println(winRatio);
             winRatio = roundTo2Decimals(winRatio);
-            System.out.println(winRatio);
 
-            /**
-             * for (Integer i : hand) {
-                System.out.print(i + ", ");
-            }
-             */
             //string of cards
             String pCards = null;
             String dCards = null;
