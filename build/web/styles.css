@@ -1,0 +1,53 @@
+
+/* 
+    Created on : Aug 2, 2016, 8:33:10 AM
+    Author     : Kostia Kazantsev
+*/
+
+.resultTable{   
+   border-collapse:collapse;
+   border:1px solid #000000;
+}
+
+.resultTableHeader{
+   text-align:center;
+   background:none repeat scroll 0 0 #B5B5B5;
+   border-bottom:1px solid #000000;  
+   padding:6px;
+}
+
+.resultTableOddRow{
+   text-align:center;
+   background:none repeat scroll 0 0 #FFFFFF;
+   border: 1px solid #ddd;
+}
+
+.resultTableEvenRow{
+   text-align:center;
+   background:none repeat scroll 0 0 #D3D3D3;
+   border: 1px solid #ddd;
+}
+/*
+table#customers {
+    font-size:16px;
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    border-spacing: 0;
+    width: 100%;
+}
+
+#customers td, #customers th {
+    border: 1px solid #ddd;
+    text-align: left;
+    padding: 8px;
+}
+
+#customers tr:nth-child(even){background-color: #f2f2f2}
+
+#customers th {
+    padding-top: 11px;
+    padding-bottom: 11px;
+    background-color: #4CAF50;
+    color: white;
+}
+*/
