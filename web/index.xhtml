@@ -47,6 +47,25 @@
             <br/>
                 *Usual bets are increments of 5.
         </h:form>
+        <!-- Start Test -->
+        <h:form>
+            <h:dataTable value="#{play.res}" var="result">
+                <h:column><f:facet name="header">Hand</f:facet>#{result.numberOfHands}</h:column>
+                <h:column><f:facet name="header">Bet</f:facet>$#{result.bet}</h:column>
+                <h:column><f:facet name="header">Player cards</f:facet>#{result.pCards}</h:column>
+                <h:column><f:facet name="header">Players total cards value</f:facet>#{result.tPlayer}</h:column>
+                <h:column><f:facet name="header">Dealer cards</f:facet>#{result.dCards}</h:column>
+                <h:column><f:facet name="header">Dealers total cards value</f:facet>#{result.tDealer}</h:column>
+                <h:column><f:facet name="header">The winner</f:facet>#{result.winner}</h:column>
+                <h:column><f:facet name="header">Anyone bust?</f:facet>#{result.over21}</h:column>
+                <h:column><f:facet name="header">Total player wins</f:facet>#{result.playerWins}</h:column>
+                <h:column><f:facet name="header">Total dealer wins</f:facet>#{result.dealerWins}</h:column>
+                <h:column><f:facet name="header">Player winning ratio</f:facet>#{result.winRatio}%</h:column>
+                <h:column><f:facet name="header">Money on hand</f:facet>$#{result.money}</h:column>
+                
+            </h:dataTable>
+        </h:form>
+        <!-- End Test -->
         <h:form>
             <h3>The Result after #{play.maxHands} hands played.</h3>
 

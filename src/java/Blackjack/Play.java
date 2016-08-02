@@ -32,6 +32,9 @@ public class Play {
     private String over21 = null;
     private Integer tplayer;
     private Integer tdealer;
+    
+    // testing::
+    ArrayList<Result> res = new ArrayList<Result>();
 
     // constructor
     public Play() {
@@ -488,6 +491,7 @@ public class Play {
             numberOfHands++;
 
             // print some test results to console
+            /*
             System.out.println("player total final: " + tplayer);
             System.out.println("dealer total final: " + tdealer);
             System.out.println("player win? " + playerWin);
@@ -504,11 +508,12 @@ public class Play {
             for (Integer i : dealerHand) {
                 System.out.print(i + ", ");
             }
+            */
 
-            System.out.println("\nPlayer wins: " + playerWins);
-            System.out.println("Dealer wins: " + dealerWins);
-            System.out.println("Player win ratio: " + (double) playerWins / (double) numberOfHands);
-            System.out.println(numberOfHands + "\n");
+            //System.out.println("\nPlayer wins: " + playerWins);
+            //System.out.println("Dealer wins: " + dealerWins);
+            //System.out.println("Player win ratio: " + (double) playerWins / (double) numberOfHands);
+            //System.out.println(numberOfHands + "\n");
 
             // who won?
             if(!playerWin && !dBust && !push)
@@ -530,11 +535,19 @@ public class Play {
             else if(dBust)
                 over21 = "Dealer";
             else
-                over21 = "No one busted";
+                over21 = "No";
             
             // Winning Ratio
-            winRatio = (double)playerWins/(double)numberOfHands;
-            winRatio = roundTo2Decimals(winRatio)*100;
+            System.out.println("Testing the winRatio");
+            System.out.println("pw: "+playerWins);
+            System.out.println("dw: "+dealerWins);
+            if(playerWins > 0 || dealerWins > 0)
+                winRatio = ((double)playerWins/(double)(playerWins+dealerWins))*100 ;
+            else
+                winRatio = 0.0;
+            System.out.println(winRatio);
+            winRatio = roundTo2Decimals(winRatio);
+            System.out.println(winRatio);
 
             /**
              * for (Integer i : hand) {
@@ -588,12 +601,19 @@ public class Play {
             results.add("Money on hand: $" + money.toString());
             results.add("--------------------");
             
+            // Test::
+            res.add(new Result(numberOfHands,usedBet,pCards,tplayer,dCards,
+                    tdealer,winner,over21,playerWins,dealerWins,winRatio,money));
             
             // reset hand switch
             handOver = false;
         }
 
         return null;
+    }
+    
+    public ArrayList<Result> getRes(){
+        return res;
     }
 
 
