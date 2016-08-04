@@ -8,39 +8,34 @@ import javax.faces.bean.ManagedBean;
 @ManagedBean
 public class Play {
 
-    // variables
-    private Integer playerMoney = null;
-    private Integer money = null;
-    private Integer bet = null;
-    private Integer usedBet = null;
-    //numberofplayes
-    private Integer maxHands = null;
-    //type of player: begginer or basic player
-    private String playerType = null;
-
-
-    private Integer playerWins = 0;
-    private Integer dealerWins = 0;
-    private Double winRatio = 0.0;
-    private Integer numberOfHands = 0;
-    boolean autoWin = false;
-    boolean playerWin = false;
-    boolean bust = false;
-    boolean push = false;
-    boolean dBust = false;
-    private String winner = null;
-    private String over21 = null;
-    private Integer tplayer;
-    private Integer tdealer;
+    /*** variables to set up ***/
+    private Integer playerMoney = null; // user inital set money
+    private Integer bet = null; // user inital set bet
+    private Integer maxHands = null; // number of hands to play
+    private String playerType = null; // strategy to use
     
-    // testing::
-    ArrayList<Result> results = new ArrayList<Result>();
+    /*** Variables for results ***/
+    private ArrayList<Result> results = new ArrayList<Result>(); // arraylist to store each result
+    private Integer numberOfHands = 0; // identifies which hand is played
+    private Integer usedBet = null; // bet used
+    private Integer tplayer; // total value of player cards
+    private Integer tdealer; // total value of dealer cards
+    private String winner = null; // store winner
+    private String over21 = null; // store who busted
+    private Integer playerWins = 0; // number of player wins
+    private Integer dealerWins = 0; // number of dealer wins
+    private Double winRatio = 0.0; // percentage chance that player wins
+    private Integer money = null; // amount money left after hand played
+    
+    /*** Variables needed for play() ***/
+    private boolean autoWin = false; // did anyone win with 2 cards?
+    private boolean playerWin = false; // player won
+    private boolean bust = false; // player busted
+    private boolean dBust = false; // dealer busted
+    private boolean push = false; // player and dealer total vaule is same
 
-    // constructor
-    public Play() {
-
-    }
-
+    /******** Getters and Setters ********/
+    
     /**
      * @return the playerMoney
      */
@@ -166,6 +161,15 @@ public class Play {
     public int getTdealer() {
         return tdealer;
     }
+    
+    /**
+     * @return the results
+     */    
+    public ArrayList<Result> getResults(){
+        return results;
+    }
+    
+    /******** Helper Methods ********/
 
     /**
      * @param c
@@ -180,7 +184,7 @@ public class Play {
      * @param deck
      * @param card
      * @param count
-     * @return
+     * @return deck of discarded cards
      */
     private ArrayList<Card> discardPile(ArrayList<Card> deck, Card card, int count) {
         deck.add(count, card);
@@ -190,7 +194,7 @@ public class Play {
     /**
      * @param deck
      * @param spot
-     * @return
+     * @return card from deck
      */
     private Card getCard(ArrayList<Card> deck, int spot) {
         return deck.get(spot);
@@ -205,8 +209,11 @@ public class Play {
         for (Integer i : hand) {
             counter += i;
         }
+        // check if contains ACE
         if (hand.contains(1))
+            // if ACE == 11 and total hand less than 22
             if((counter + 10) < 22)
+                // count ACE as 11
                 counter += 10;
         return counter;
     }
@@ -224,6 +231,11 @@ public class Play {
         return bets[rnd];
     }
 
+    /**
+     * @param hand
+     * @param dealerHand
+     * @return string of next move
+     */
     private String nextMove(ArrayList<Integer> hand, ArrayList<Integer> dealerHand) {
         String move = null;
         // check which move method to use
@@ -235,63 +247,62 @@ public class Play {
         }
         return move;
     }
-    
+    /**
+     * @param winRatio
+     * @return double number rounded to 2 decimals
+     */
     private double roundTo2Decimals(double winRatio){
         DecimalFormat df2 = new DecimalFormat("###.##");
         return Double.valueOf(df2.format(winRatio));
     }
+    
+    /******** Main Method ********/
 
     /**
      * @return the null
      */
     public String play() {
 
-        // simulation variables
-        boolean handOver = false;
-        boolean playerTurnOver = false;
-        int cardsLeft = 0;
-        String move = "";
-        ArrayList<Integer> discard = new ArrayList<Integer>();
-        int discardC = 0;
-        int discardP = 0;
-        ArrayList<Integer> hand = new ArrayList<Integer>();
-        ArrayList<Integer> dealerHand = new ArrayList<Integer>();
-        playerWins = 0;
-        dealerWins = 0;
-        winRatio = null;
-        numberOfHands = 0;
-        autoWin = false;
-        playerWin = false;
-        boolean bust = false;
-        boolean push = false;
-        boolean dBust = false;
-        winner = null;
-        over21 = null;
+        /*** move user set variables ***/
+        money = playerMoney; // get user set money
         
-        money = playerMoney;
+        /*** user entered info checkers ***/
         
-        if (playerType == null) {
-            playerType = "Beginner";
-        }
-
-        // user entered info checkers
         // check if player money set,
         // if not, start with $100
         if (money == null) {
             money = playerMoney = 100;
         }
-
-        // if no maxHands set, set to 5
+        
+        // check if strategy is set
+        // if not, set to Beginner
+        if (playerType == null) {
+            playerType = "Beginner";
+        }
+        
+        // check if number of hands have been set
+        // if not, set to 5
         if (maxHands == null) {
             maxHands = 5;
         }
+        
+        /*** method private variables initialized ***/
+        boolean handOver = false; // sets to game is over to false
+        String move = ""; // stores what move to make nest
+        ArrayList<Integer> discard = new ArrayList<>(); // stores used cards
+        ArrayList<Integer> hand = new ArrayList<>(); // Stores player cards
+        ArrayList<Integer> dealerHand = new ArrayList<>(); // Stores dealer cards
 
-        // build deck and shuffle
+        /*** Build deck and shuffle ***/
         DeckOfCards deck = new DeckOfCards();
         deck.shuffle(100);
 
-        // main iterative loop
+        /*** Main iterative loop ***/
         while (numberOfHands < maxHands) {
+            
+            /*** While loop specific variables ***/
+            String pCards = null;
+            String dCards = null;
 
             // if bet isn't null, use bet.
             // else use a radom bet each hand.
@@ -304,14 +315,15 @@ public class Play {
             // play hand
             while (!handOver) {
 
-                // reset values to false
-                push = false;
+                /*** Reset Values ***/
                 autoWin = false;
                 playerWin = false;
                 bust = false;
                 dBust = false;
+                push = false;
+                over21 = null;
 
-                // clear all hands
+                /*** Clear all hands ***/
                 hand.clear();
                 dealerHand.clear();
 
@@ -335,27 +347,6 @@ public class Play {
                 tplayer = totalHand(hand);
                 tdealer = totalHand(dealerHand);
 
-                /**
-                 * **** Start check for Blackjack *****
-                 */
-                // if hand contains an ACE
-                if (hand.contains(1)) // if ACE = 11 and total hand less than 22
-                {
-                    if ((tplayer + 10) < 22) // count ACE as 11
-                    {
-                        tplayer += 10;
-                    }
-                }
-
-                // if dealerHand contains an ACE
-                if (dealerHand.contains(1)) // if ACE == 11 and total dealerHand less than 22
-                {
-                    if ((tdealer + 10) < 22) // count ACE as 11
-                    {
-                        tdealer += 10;
-                    }
-                }
-
                 // determine if autowin is to occur or push based on Blackjack
                 if (tdealer == 21 && tplayer != 21) {
                     autoWin = true;
@@ -367,14 +358,6 @@ public class Play {
                 if (tplayer == 21 && tdealer == 21) {
                     push = true;
                 }
-
-                if (push | autoWin) {
-                    break;
-                }
-
-                /**
-                 * * End check for Blackjack **
-                 */
 
                 // decide what to do.
                 move = nextMove(hand, dealerHand);
@@ -400,16 +383,11 @@ public class Play {
 
                 // get player total and check if player busted
                 tplayer = totalHand(hand);
-                // if hand contains an ACE
-            if (hand.contains(1)) // if ACE = 11 and total hand less than 22
-            {
-                if ((tplayer + 10) < 22) // count ACE as 11
-                {
-                    tplayer += 10;
-                }
-            }
+                
+                // set bust to true if player total is moare than 21
                 if(tplayer > 21){
                     bust = true;
+                    over21 = "Player";
                 }
                 
                 // place dealers second card to discard (reveal dealers second card)
@@ -426,7 +404,7 @@ public class Play {
                     }
                 }
 
-                // end current hand
+                /*** end current hand ***/
                 handOver = true;
             }
 
@@ -439,19 +417,13 @@ public class Play {
             //get total of dealerHand
             tdealer = totalHand(dealerHand);
             
-            // if dealerHand contains an ACE
-            if (dealerHand.contains(1)) // if ACE == 11 and total dealerHand less than 22
-            {
-                if ((tdealer + 10) < 22) // count ACE as 11
-                {
-                    tdealer += 10;
-                }
-            }
-
-            //finish game
+            // check if dealer busted
             if (tdealer > 21) {
                 dBust = true;
+                over21 = "Dealer";
             }
+
+            /*** Finish Hand ***/
             if (tdealer < tplayer && !bust) {
                 playerWin = true;
             }
@@ -478,9 +450,7 @@ public class Play {
                 dealerWins++;
             }
             
-            /**
-             * Increment hands played
-             */
+            /*** Increment hands played ***/
             numberOfHands++;
 
             // who won?
@@ -497,24 +467,14 @@ public class Play {
             else
                 winner = "ERROR: UNKNOWN WINNER";
             
-            // Anyone Bust?
-            if(bust)
-                over21 = "Player";
-            else if(dBust)
-                over21 = "Dealer";
-            else
-                over21 = "No";
-            
-            // Winning Ratio
+            /*** Get Winning Ratio ***/
             if(playerWins > 0 || dealerWins > 0)
                 winRatio = ((double)playerWins/(double)(playerWins+dealerWins))*100 ;
             else
                 winRatio = 0.0;
             winRatio = roundTo2Decimals(winRatio);
 
-            //string of cards
-            String pCards = null;
-            String dCards = null;
+            /*** Store string of cards ***/
             for (int i = 0; i<hand.size(); i++){
                 if (i==0){
                     pCards = hand.get(i).toString();
@@ -546,8 +506,7 @@ public class Play {
              * Players money that is left: money
              */
             // Test::
-            results.add(new Result(numberOfHands,usedBet,pCards,tplayer,dCards,
-                    tdealer,winner,over21,playerWins,dealerWins,winRatio,money));
+            results.add(new Result(numberOfHands,usedBet,pCards,tplayer,dCards,tdealer,winner,over21,playerWins,dealerWins,winRatio,money));
             
             // reset hand switch
             handOver = false;
@@ -555,11 +514,4 @@ public class Play {
 
         return null;
     }
-    
-    public ArrayList<Result> getResults(){
-        return results;
-    }
-
-
-
 }
