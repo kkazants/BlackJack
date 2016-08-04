@@ -1,0 +1,82 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:head>
+        <title>Blackjack Simulator</title>
+        <link href="styles.css" rel="stylesheet" type="text/css" />
+    </h:head>
+    <h:body>
+        <div id="wrapper">
+        <h1>Welcome to Blackjack Simulator!</h1>
+        <h:form>
+            <h:commandButton id="back" value="Home" action="index" styleClass="button" />
+        </h:form>
+        <h:form>
+            <h2>Please fill in the information.</h2>
+            <ul>
+                <li>If no money stated, is set to $100.</li>
+                <li>If number of hands not set, is set to 5 hands.</li>
+                <li>If no experience level set, set to beginner.</li>
+                <li>If no bet is set, will use a random bet between 5 through 50 in increments of 5 for each hand.</li>
+            </ul>
+            <table>
+                <tr>
+                    <td>Amount of money to start with: $</td>
+                    <td><h:inputText id="playerMoney" title="Set amount of money" value="#{play.playerMoney}" /></td>
+                </tr>
+                <tr>
+                    <td>Set the bet* amount: $</td>
+                    <td><h:inputText id="bet" title="Set the value of bet" value="#{play.bet}" /></td>
+                </tr>
+                <tr>
+                    <td>Set the number of hands to play: </td>
+                    <td><h:inputText id="numberOfHands" title="Set number of hands" value="#{play.maxHands}" /></td>
+                </tr>
+                <tr>
+                    <td>Select experience level:</td>
+                    <td>
+                        <h:selectOneRadio value="#{play.playerType}">
+                            <f:selectItem itemValue="Beginner" itemLabel="Beginner" />
+                            <f:selectItem itemValue="Intermediate" itemLabel="Intermediate" />
+                        </h:selectOneRadio>
+                    </td>
+                </tr>
+                <tr>
+                    <td> </td>
+                    <td>
+                        <h:commandButton id="simulate" value="Simulate" actionListener="#{play.play}" styleClass="button" />
+                        <h:commandButton id="reset" value="Reset" action="similator" styleClass="button" />
+                    </td>
+                </tr>
+            </table>
+            
+        </h:form>
+        <br/> <!-- spacer -->
+        <h:form rendered="#{not empty play.results}">
+            <h:dataTable value="#{play.results}" var="result"
+                         styleClass="resultTable"
+                         headerClass="resultTableHeader"
+                         rowClasses="resultTableOddRow,resultTableEvenRow" >
+                <h:column><f:facet name="header">Hand</f:facet>#{result.numberOfHands}</h:column>
+                <h:column><f:facet name="header">Bet</f:facet>$#{result.bet}</h:column>
+                <h:column><f:facet name="header">Player cards</f:facet>#{result.pCards}</h:column>
+                <h:column><f:facet name="header">Players total cards value</f:facet>#{result.tPlayer}</h:column>
+                <h:column><f:facet name="header">Dealer cards</f:facet>#{result.dCards}</h:column>
+                <h:column><f:facet name="header">Dealers total cards value</f:facet>#{result.tDealer}</h:column>
+                <h:column><f:facet name="header">The winner</f:facet>#{result.winner}</h:column>
+                <h:column><f:facet name="header">Anyone bust?</f:facet>#{result.over21}</h:column>
+                <h:column><f:facet name="header">Total player wins</f:facet>#{result.playerWins}</h:column>
+                <h:column><f:facet name="header">Total dealer wins</f:facet>#{result.dealerWins}</h:column>
+                <h:column><f:facet name="header">Player winning ratio</f:facet>#{result.winRatio}%</h:column>
+                <h:column><f:facet name="header">Money on hand</f:facet>$#{result.money}</h:column>
+
+            </h:dataTable>
+            <h:commandButton id="reset" value="Reset" action="similator" styleClass="button" />
+            <h:commandButton id="back" value="Home" action="index" styleClass="button" />
+        </h:form>
+        </div>
+    </h:body>
+</html>

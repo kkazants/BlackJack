@@ -18,7 +18,7 @@ public class Play {
     //type of player: begginer or basic player
     private String playerType = null;
 
-    private ArrayList<String> results = new ArrayList<>();
+
     private Integer playerWins = 0;
     private Integer dealerWins = 0;
     private Double winRatio = 0.0;
@@ -34,7 +34,7 @@ public class Play {
     private Integer tdealer;
     
     // testing::
-    ArrayList<Result> res = new ArrayList<Result>();
+    ArrayList<Result> results = new ArrayList<Result>();
 
     // constructor
     public Play() {
@@ -239,13 +239,6 @@ public class Play {
     private double roundTo2Decimals(double winRatio){
         DecimalFormat df2 = new DecimalFormat("###.##");
         return Double.valueOf(df2.format(winRatio));
-    }
-    
-    /**
-     * @return the results
-     */
-    public ArrayList<String> getResults(){
-        return results;
     }
 
     /**
@@ -477,7 +470,9 @@ public class Play {
             } else if (playerWin) {
                 money += usedBet * 2;
                 playerWins++;
-            } else if (push) {
+            } else if(push && hand.size() == 2){
+                money += usedBet * (3 / 2);
+            }else if (push) {
                 money += usedBet;
             } else {
                 dealerWins++;
@@ -550,22 +545,8 @@ public class Play {
              * Winning ratio: winRatio.
              * Players money that is left: money
              */
-            results.add("Hand: " + numberOfHands.toString());
-            results.add("Bet: $" + usedBet.toString());
-            results.add("Player cards: " + pCards);
-            results.add("Players total cards value: " + tplayer.toString());
-            results.add("Dealer cards: " + dCards);
-            results.add("Dealers total cards value: " + tdealer.toString());
-            results.add("The winner is: " + winner);
-            results.add("Anyone bust?: " + over21);
-            results.add("Total player wins: " + playerWins.toString());
-            results.add("Total dealer wins: " + dealerWins.toString());
-            results.add("Player winning ratio: " + winRatio.toString() + "%");
-            results.add("Money on hand: $" + money.toString());
-            results.add("--------------------");
-            
             // Test::
-            res.add(new Result(numberOfHands,usedBet,pCards,tplayer,dCards,
+            results.add(new Result(numberOfHands,usedBet,pCards,tplayer,dCards,
                     tdealer,winner,over21,playerWins,dealerWins,winRatio,money));
             
             // reset hand switch
@@ -575,8 +556,8 @@ public class Play {
         return null;
     }
     
-    public ArrayList<Result> getRes(){
-        return res;
+    public ArrayList<Result> getResults(){
+        return results;
     }
 
 

@@ -1,83 +1,131 @@
-<?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE html>
 <html lang="en"
       xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
-    <h:head>
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+    <head>
         <title>Blackjack Simulator</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
         <link href="styles.css" rel="stylesheet" type="text/css" />
-    </h:head>
-    <h:body>
-        <h1>Welcome to Blackjack Simulator!</h1>
-        <h:form>
-            <h2>Please fill in the information.</h2>
-            <p id="top">
-                Set the amount of money you would like to start with: $
-                <h:inputText 
-                    id="playerMoney" 
-                    title="Set amount of money" 
-                    value="#{play.playerMoney}"
-                    />
-                <br/>
-                Set the bet* amount: $
-                <h:inputText
-                    id="bet"
-                    title="Set the value of bet"
-                    value="#{play.bet}"
-                    />
-                <br/>
-                Set the number of hands to play: 
-                <h:inputText
-                    id="numberOfHands"
-                    title="Set number of hands"
-                    value="#{play.maxHands}"
-                    />
-                <br/>
-                Select experience level: 
-                <h:selectOneRadio value="#{play.playerType}">
-                    <f:selectItem itemValue="Beginner" itemLabel="Beginner" />
-                    <f:selectItem itemValue="Intermediate" itemLabel="Intermediate" />
-                </h:selectOneRadio>
-                
-                <br/>
-                <!--<h:commandButton id="submit" value="Submit" action="response"/>-->
-                <h:commandButton id="submit" value="Simulate" actionListener="#{play.play}"/>
-            </p>
-            <br/>
-                *Usual bets are increments of 5.
-        </h:form>
-        <!-- Start Test -->
-        <h:form>
-            <h:dataTable value="#{play.res}" var="result"
-                         styleClass="resultTable"
-                         headerClass="resultTableHeader"
-                         rowClasses="resultTableOddRow,resultTableEvenRow">
-                <h:column><f:facet name="header">Hand</f:facet>#{result.numberOfHands}</h:column>
-                <h:column><f:facet name="header">Bet</f:facet>$#{result.bet}</h:column>
-                <h:column><f:facet name="header">Player cards</f:facet>#{result.pCards}</h:column>
-                <h:column><f:facet name="header">Players total cards value</f:facet>#{result.tPlayer}</h:column>
-                <h:column><f:facet name="header">Dealer cards</f:facet>#{result.dCards}</h:column>
-                <h:column><f:facet name="header">Dealers total cards value</f:facet>#{result.tDealer}</h:column>
-                <h:column><f:facet name="header">The winner</f:facet>#{result.winner}</h:column>
-                <h:column><f:facet name="header">Anyone bust?</f:facet>#{result.over21}</h:column>
-                <h:column><f:facet name="header">Total player wins</f:facet>#{result.playerWins}</h:column>
-                <h:column><f:facet name="header">Total dealer wins</f:facet>#{result.dealerWins}</h:column>
-                <h:column><f:facet name="header">Player winning ratio</f:facet>#{result.winRatio}%</h:column>
-                <h:column><f:facet name="header">Money on hand</f:facet>$#{result.money}</h:column>
-                
-            </h:dataTable>
-        </h:form>
-        <!-- End Test -->
-        <h:form>
-            <h3>The Result after #{play.maxHands} hands played.</h3>
+    </head>
+    <body>
+        <div id="wrapper">
+            <h1>Welcome to Blackjack Simulator!</h1>
+            <p>Blackjack Simulator automatically plays for user based on information given and experience level chosen.</p>
 
-            <ui:repeat var="item" value="#{play.results}"><p>#{item}</p></ui:repeat>
+            <h:form>
+                <h:commandButton id="simulate" value="Start" action="similator" styleClass="button" />
+            </h:form>
             
-            <h:commandButton id="reset" value="Reset" action="index"/>
+            <h4>The Rules:</h4>
+            <ul>
+                <li>Played with one 52-card decks.</li>
+                <li>2-10 are worth face value.</li>
+                <li>K,Q and J are worth 10.</li>
+                <li>A is either 1 or 11.</li>
+                <li>To win: having higher total without going over 21.</li>
+                <li>Double Down allowed only if player has only 2 cards.</li>
+                <li>** No Insurance is considered in this simulator. **</li>
+            </ul>
+            <h4>Betting</h4>
+            <ul>
+                <li>The pay out is 3-2, so a 2-card 21 on $5 bet wins $7.50</li>
+                <li>If dealer and player has 2-card 21, the hand pushes (ties) and player gets original bet back.</li>
+                <li>If dealer goes 21 on 3 or more cards and player has a 2-card 21, player gets blackjack 3-2 payoff.</li>
+            </ul>
+
+            <h4>Dealer Rules:</h4>
+            <p>Dealer must hit until total value of cards are 17 or more. Dealer stands on all 17.</p>
+
+
+            <h4>Experience Levels:</h4>
+            <ul>
+                <li>
+                    Beginner Strategy:
+                    <ul><li>Beginner player plays by same rules the dealer plays.</li></ul>
+                </li>
+                <li>
+                    Intermediate Strategy:
+                    <ul><li>
+                            Intermediate plays based on this table:
+                            <table id="interTable">
+                                <tr>
+                                    <th>If player has:</th>
+                                    <th>And dealer shows:</th>
+                                    <th>Player does:</th>
+                                </tr>
+                                <tr>
+                                    <td>8 and under</td>
+                                    <td>Always hits, regardless of dealer's card</td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td>9</td>
+                                    <td>3 ,4, 5, or 6</td>
+                                    <td>Double down*</td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>2 or 7 and above</td>
+                                    <td>Hit</td>
+                                </tr>
+                                <tr>
+                                    <td>10</td>
+                                    <td>2 through 9</td>
+                                    <td>Double down*</td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>10 or ace</td>
+                                    <td>Hit</td>
+                                </tr>
+                                <tr>
+                                    <td>11</td>
+                                    <td>2 through 10</td>
+                                    <td>Double down*</td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>Ace</td>
+                                    <td>Hit</td>
+                                </tr>
+                                <tr>
+                                    <td>12</td>
+                                    <td>2, 3, or 7 and above</td>
+                                    <td>Hit</td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>4 through 6</td>
+                                    <td>Stand</td>
+                                </tr>
+                                <tr>
+                                    <td>13 through 16</td>
+                                    <td>7 and above</td>
+                                    <td>Hit</td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>2 through 6</td>
+                                    <td>Stand</td>
+                                </tr>
+                                <tr>
+                                    <td>17 through 21</td>
+                                    <td>Always stand</td>
+                                    <td></td>
+                                </tr>
+                            </table>
+                            *Double down only if player has 2 cards. If player has more than 2 cards, player hits.
+                        </li></ul>
+                </li>
+            </ul>
             
-        </h:form>
-    </h:body>
+            <h:form>
+                <h:commandButton id="simulate" value="Start" action="similator" styleClass="button" />
+            </h:form>
+
+            <p>More information on blackjack can be found here: <h:outputLink target="_blank" value="https://prezi.com/y6nj66x5br75/counting/">Prezi: Counting</h:outputLink>, thanks to Megan Gaynor. The simulator code was put together by Michael Scott, Konstantin Kazantsev and William Jackson. The web app was put together by Konstantin Kazantsev.</p>
+        </div>
+    </body>
 </html>
-

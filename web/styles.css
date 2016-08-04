@@ -1,12 +1,27 @@
-
 /* 
     Created on : Aug 2, 2016, 8:33:10 AM
     Author     : Kostia Kazantsev
 */
 
-.resultTable{   
-   border-collapse:collapse;
-   border:1px solid #000000;
+/*
+    Main structor of web app
+*/
+#wrapper {
+    max-width: 1020px;
+    margin: 2px auto;
+}
+
+.button {
+    margin: 2px;
+}
+
+/*
+    Results table layout
+*/
+.resultTable{
+    margin: 6px;
+    border-collapse:collapse;
+    border:1px solid #000000;
 }
 
 .resultTableHeader{
@@ -27,6 +42,28 @@
    background:none repeat scroll 0 0 #D3D3D3;
    border: 1px solid #ddd;
 }
+
+/*
+    Intermediate strategy table on index.xhtml
+*/
+
+table#interTable{
+    margin: 2px;
+    font-size: 13px;
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    border-spacing: 0;
+    
+}
+
+#interTable td, #interTable th {
+    border: 1px solid #ddd;
+    text-align: left;
+    padding: 6px;
+}
+
+#interTable tr:nth-child(even){background-color: #f2f2f2}
+
 /*
 table#customers {
     font-size:16px;
